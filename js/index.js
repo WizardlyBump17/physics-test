@@ -29,17 +29,17 @@ function initCanvas() {
 }
 
 function initObjects() {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 0; i++) {
         OBJECTS.push(
             new Circle(
                 1,
                 new Vector(random(-canvas().width / PIXEL_SIZE / 2, canvas().width / PIXEL_SIZE / 2), random(-canvas().height / PIXEL_SIZE / 2, canvas().height / PIXEL_SIZE / 2)),
-                new Vector(0.1, 0),
+                new Vector(0, 0),
                 5
             )
         )
     }
-    OBJECTS.push(new Circle(5000000000, new Vector(0, 0), new Vector(0, 0), 50))
+    OBJECTS.push(new Circle(50000000000, new Vector(0, 0), new Vector(0, 0), 50))
 }
 
 function createCirlce(mass, location, velocity, radius) {

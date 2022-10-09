@@ -9,23 +9,26 @@ class Object {
     }
 
     tick() {
+        const heaviest = Object.getHeaviest()
+        if (this != heaviest && Physics.ENABLED) {
+            const gravitacionalForce = Physics.getFoce(this, heaviest)
+
+            const cos = (heaviest.location.x - this.location.x) / this.location.distance(heaviest.location)
+            const sin = (heaviest.location.y - this.location.y) / this.location.distance(heaviest.location)
+            
+            const force = new Vector(gravitacionalForce * cos, gravitacionalForce * sin)
+            this.acceleration = force.divide(this.mass)
+        }
+
         this.velocity = this.velocity.add(this.acceleration)
         this.teleport(this.location.add(this.velocity))
+
+        this.onCheckCollision()
 
         for (let i in OBJECTS) {
             const other = OBJECTS[i]
             if (other == this)
                 continue
-
-            if (Physics.ENABLED) {
-                const gravitacionalForce = Physics.getFoce(this, other)
-
-                const cos = (other.location.x - this.location.x) / this.location.distance(other.location)
-                const sin = (other.location.y - this.location.y) / this.location.distance(other.location)
-                
-                const force = new Vector(gravitacionalForce * cos, gravitacionalForce * sin)
-                this.acceleration = force.divide(this.mass)
-            }
 
             if (this.collides(other)) 
                 this.onCollision(other)
@@ -45,6 +48,19 @@ class Object {
 
     onCollision(other) {
     }
+
+    onCheckCollision() {
+    }
+
+    static getHeaviest() {
+        let heaviest = OBJECTS[0]
+        for (let i in OBJECTS) {
+            const object = OBJECTS[i]
+            if (object.mass > heaviest.mass)
+                heaviest = object
+        }
+        return heaviest
+    }
 }
 
 class Circle extends Object {
@@ -57,7 +73,7 @@ class Circle extends Object {
     render(color) {
         drawCircle(this.location, this.radius, color)
 
-        writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 + 1 * PIXEL_SIZE), `ID: ${this.id}`)
+       writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 + 1 * PIXEL_SIZE), `ID: ${this.id}`)
         writeText(this.location.subtractExact(this.radius / 2, this.radius / 2), `Mass: ${this.mass}`)
         writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 - 1 * PIXEL_SIZE), `Location: ${this.location.x.toFixed(2)} ${this.location.y.toFixed(2)}`)
         writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 - 2 * PIXEL_SIZE), `Velocity: ${this.velocity.x.toFixed(2)} ${this.velocity.y.toFixed(2)}`)
