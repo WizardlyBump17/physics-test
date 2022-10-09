@@ -1,7 +1,6 @@
 class Object {
 
     constructor(mass, location, velocity) {
-        this.id = Math.round(random(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER))
         this.mass = mass
         this.location = location
         this.acceleration = Vector.ZERO
@@ -22,8 +21,6 @@ class Object {
 
         this.velocity = this.velocity.add(this.acceleration)
         this.teleport(this.location.add(this.velocity))
-
-        this.onCheckCollision()
 
         for (let i in OBJECTS) {
             const other = OBJECTS[i]
@@ -73,15 +70,16 @@ class Circle extends Object {
     render(color) {
         drawCircle(this.location, this.radius, color)
 
-       writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 + 1 * PIXEL_SIZE), `ID: ${this.id}`)
-        writeText(this.location.subtractExact(this.radius / 2, this.radius / 2), `Mass: ${this.mass}`)
-        writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 - 1 * PIXEL_SIZE), `Location: ${this.location.x.toFixed(2)} ${this.location.y.toFixed(2)}`)
-        writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 - 2 * PIXEL_SIZE), `Velocity: ${this.velocity.x.toFixed(2)} ${this.velocity.y.toFixed(2)}`)
-        writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 - 3 * PIXEL_SIZE), `Acceleration: ${this.acceleration.x.toFixed(5)} ${this.acceleration.y.toFixed(5)}`)
+        if (this == Object.getHeaviest()) {
+            writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 + 1 * PIXEL_SIZE), `Mass: ${this.mass}`)
+            writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 - 0 * PIXEL_SIZE), `Location: ${this.location.x.toFixed(2)} ${this.location.y.toFixed(2)}`)
+            writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 - 1 * PIXEL_SIZE), `Velocity: ${this.velocity.x.toFixed(2)} ${this.velocity.y.toFixed(2)}`)
+            writeText(this.location.subtractExact(this.radius / 2, this.radius / 2 - 2 * PIXEL_SIZE), `Acceleration: ${this.acceleration.x.toFixed(5)} ${this.acceleration.y.toFixed(5)}`)
+        }
     }
 
     collides(other) {
-        if (other instanceof Circle)
+        if (other instanceof Circle) 
             return this.location.distance(other.location) < (this.radius + other.radius)
 
         return false
