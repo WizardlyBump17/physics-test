@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+}
+
+#main {
+    background-color: black;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
