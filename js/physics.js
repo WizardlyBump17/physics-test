@@ -2,6 +2,8 @@ class Physics {
 
     static GRAVITY_CONSTANT = 6.67408e-11
     static ENABLED = true
+    static ZERO_ON_COLLISION = false
+    static RESTITUTION = 0.7
 
     static getFoce(object1, object2) {
         let distance = object1.location.distance(object2.location)

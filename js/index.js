@@ -20,20 +20,32 @@ function initCanvas() {
     canvas.height = window.innerHeight
 
     initObjects()
+
+    canvas.addEventListener('click', event => {
+        const x = event.clientX / PIXEL_SIZE - CENTER.x
+        const y = event.clientY / PIXEL_SIZE - CENTER.y
+        createCirlce(1, new Vector(x, y), new Vector(0.1, 0), 5)
+    })
 }
 
 function initObjects() {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {
         OBJECTS.push(
             new Circle(
                 1,
                 new Vector(random(-canvas().width / PIXEL_SIZE / 2, canvas().width / PIXEL_SIZE / 2), random(-canvas().height / PIXEL_SIZE / 2, canvas().height / PIXEL_SIZE / 2)),
-                new Vector(0, 0),
+                new Vector(0.1, 0),
                 5
             )
         )
     }
-    OBJECTS.push(new Circle(500000000, new Vector(0, 0), new Vector(0, 0), 10))
+    OBJECTS.push(new Circle(5000000000, new Vector(0, 0), new Vector(0, 0), 50))
+}
+
+function createCirlce(mass, location, velocity, radius) {
+    const circle = new Circle(mass, location, velocity, radius)
+    console.log(`CREATED CIRCLE ${circle}`)
+    OBJECTS.push(circle)
 }
 
 function canvas() {
